@@ -1,17 +1,17 @@
 package services;
 
-import j3d.abstraction.universe.ACamera;
-import j3d.abstraction.universe.AObject;
-import j3d.abstraction.universe.ASharedUniverse;
+import j3d.interfaces.universe.ICamera;
+import j3d.interfaces.universe.IObject;
+import j3d.interfaces.universe.ISharedUniverse;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface EVCServices extends Remote {
 
-	public void update(ACamera camera) throws RemoteException;
+	public void update(ICamera camera) throws RemoteException;
 	
-	public void update(AObject object) throws RemoteException;
+	public void update(IObject object) throws RemoteException;
 	
-	public ASharedUniverse getASharedUniverse();
+	public ISharedUniverse getSharedUniverse();
 }
