@@ -1,7 +1,5 @@
 package servicesImpl;
 
-import j3d.abstraction.universe.ACamera;
-import j3d.abstraction.universe.AObject;
 import j3d.abstraction.universe.ASharedUniverse;
 import j3d.interfaces.universe.ICamera;
 import j3d.interfaces.universe.IObject;
@@ -20,7 +18,7 @@ public class EVCServicesImpl extends UnicastRemoteObject implements EVCServices 
 	
 	private ISharedUniverse sharedUniverse;
 
-	protected EVCServicesImpl (String sharedWorldName, String serverHostName, int serverRMIPort,
+	public EVCServicesImpl (String sharedWorldName, String serverHostName, int serverRMIPort,
 	          String nomGroupeUpdate, int portDiffusionUpdate) throws RemoteException {
 	    super();  
 		try {
@@ -29,7 +27,7 @@ public class EVCServicesImpl extends UnicastRemoteObject implements EVCServices 
 	         LocateRegistry.createRegistry (serverRMIPort) ;
 	         Naming.rebind ("//" + serverHostName + ":" + serverRMIPort + "/" + sharedWorldName, this) ;
 	         System.out.println ("Ready...") ;
-	         sharedUniverse = new ASharedUniverse();
+	         sharedUniverse = new ASharedUniverse(sharedWorldName);
 	      } catch (Exception e) {
 	         System.out.println ("Problem youston") ;
 	      }
@@ -42,13 +40,14 @@ public class EVCServicesImpl extends UnicastRemoteObject implements EVCServices 
 
 	@Override
 	public void update(ICamera camera) throws RemoteException {
-		
+		sharedUniverse.getCamera(camera.getOwnerName()).setOrientation(camera.getOrientation());
+		sharedUniverse.getCamera(camera.getOwnerName()).setPosition(camera.getPosition());
 	}
 
 	@Override
 	public void update(IObject object) throws RemoteException {
-		// TODO Auto-generated method stub
-		
+		sharedUniverse.getObject(object.getName()).setOrientation(object.getOrientation());
+		sharedUniverse.getCamera(object.getName()).setPosition(object.getPosition());
 	}
 
 }
