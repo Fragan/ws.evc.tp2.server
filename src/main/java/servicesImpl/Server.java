@@ -54,7 +54,10 @@ public class Server extends UnicastRemoteObject implements ISharedUniverseServer
 	}
 
 	public boolean add(IObject object) throws RemoteException {
-		return sharedUniverse.add(object);
+		boolean result = sharedUniverse.add(object);
+		if (result)
+			BroadcastUpdates.getInstance().diffuse(object);
+		return result;
 	}
 
 	public void remove(IObject object) throws RemoteException {
@@ -62,7 +65,10 @@ public class Server extends UnicastRemoteObject implements ISharedUniverseServer
 	}
 
 	public boolean add(ICamera camera) throws RemoteException {
-		return sharedUniverse.add(camera);
+		boolean result =  sharedUniverse.add(camera);
+		if (result)
+			BroadcastUpdates.getInstance().diffuse(camera);
+		return result;
 	}
 
 	public void remove(ICamera camera) throws RemoteException {
@@ -84,18 +90,18 @@ public class Server extends UnicastRemoteObject implements ISharedUniverseServer
 	public void update(ICamera camera) throws RemoteException {
 		ICamera ourCamera = sharedUniverse.getCamera(camera.getOwnerName());
 		if (ourCamera != null) {
-			ourCamera.setOrientation(camera.getOrientation());
-			ourCamera.setPosition(camera.getPosition());
+			ourCamera.setOrientation(camera.getOrientation(), false);
+			ourCamera.setPosition(camera.getPosition(), false);
 			BroadcastUpdates.getInstance().diffuse(camera);
+			
 		}
 	}
 
 	public void update(IObject object) throws RemoteException {
 		IObject ourObject = sharedUniverse.getObject(object.getName());
 		if (ourObject != null) {
-			ourObject.setOrientation(object.getOrientation());
-			ourObject.setPosition(object.getPosition());
-			System.out.println(BroadcastUpdates.instance);
+			ourObject.setOrientation(object.getOrientation(), false);
+			ourObject.setPosition(object.getPosition(), false);
 			BroadcastUpdates.getInstance().diffuse(object);
 		}
 	}
