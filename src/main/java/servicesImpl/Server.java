@@ -21,7 +21,7 @@ public class Server extends UnicastRemoteObject implements ISharedUniverseServer
 	private ISharedUniverse sharedUniverse;
 
 	public Server(String sharedWorldName, String serverHostName,
-			int serverRMIPort, String nomGroupeUpdate, int portDiffusionUpdate)
+			int serverRMIPort)
 			throws RemoteException {
 		super();
 		sharedUniverse = new ASharedUniverse(sharedWorldName);
